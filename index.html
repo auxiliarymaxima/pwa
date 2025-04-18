@@ -17,6 +17,9 @@
         .then(reg => {
           alert("Service worker registered!");
 
+          navigator.serviceWorker.addEventListener('message', event => {
+  alert("Message from SW: " + event.data);
+});
           // Optional: listen for messages from the SW
           navigator.serviceWorker.addEventListener('message', event => {
             alert("Message from SW: " + event.data);
