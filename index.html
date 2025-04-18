@@ -12,11 +12,19 @@
   <h1>Hello, this is my PWA!</h1>
   <p>Welcome to your installable web app.</p>
   <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(reg => console.log('Service Worker registered:', reg))
-        .catch(err => console.error('Service Worker registration failed:', err));
-    }
+  alert("Page loaded");
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(reg => {
+        alert("Service worker registered successfully.");
+      })
+      .catch(err => {
+        alert("Service worker registration failed: " + err);
+      });
+  } else {
+    alert("Service workers not supported.");
+  }
   </script>
 </body>
 </html>
