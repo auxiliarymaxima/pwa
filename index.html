@@ -32,6 +32,31 @@
       alert("Service workers not supported.");
     }
 
+  let deferredPrompt;
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault(); // Prevent auto prompt
+    deferredPrompt = e;
+    alert("App is installable!");
+
+    // Optionally show an install button here
+    const btn = document.createElement("button");
+    btn.innerText = "Install App";
+    btn.onclick = () => {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(choiceResult => {
+        if (choiceResult.outcome === 'accepted') {
+          alert("User accepted the install prompt");
+        } else {
+          alert("User dismissed the install prompt");
+        }
+        deferredPrompt = null;
+      });
+    };
+    document.body.appendChild(btn);
+  });
+
+
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault(); // Avoid auto prompt
       alert("App is installable!");
