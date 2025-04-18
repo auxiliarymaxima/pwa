@@ -1,8 +1,14 @@
 self.addEventListener('install', event => {
-  // Send a message back to the page
+  self.skipWaiting(); // Force it to activate right away
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    self.clients.claim() // Start controlling pages immediately
+  );
   self.clients.matchAll().then(clients => {
     clients.forEach(client => {
-      client.postMessage("Service worker installed!");
+      client.postMessage("Service worker activated and in control!");
     });
   });
 });
