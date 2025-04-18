@@ -1,8 +1,8 @@
-
 self.addEventListener('install', event => {
-  console.log('Service Worker installing.');
-});
-
-self.addEventListener('fetch', event => {
-  event.respondWith(fetch(event.request));
+  // Send a message back to the page
+  self.clients.matchAll().then(clients => {
+    clients.forEach(client => {
+      client.postMessage("Service worker installed!");
+    });
+  });
 });
