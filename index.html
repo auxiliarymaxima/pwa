@@ -1,30 +1,38 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My PWA</title>
+  <title>Simple PWA</title>
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#ffffff" />
 </head>
 <body>
-  <h1>Hello, this is my PWA!</h1>
-  <p>Welcome to your installable web app.</p>
-  <script>
-  alert("Page loaded");
+  <h1>Hello, PWA!</h1>
 
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(reg => {
-        alert("Service worker registered successfully.");
-      })
-      .catch(err => {
-        alert("Service worker registration failed: " + err);
-      });
-  } else {
-    alert("Service workers not supported.");
-  }
+  <script>
+    alert("Page loaded");
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(reg => {
+          alert("Service worker registered!");
+
+          // Optional: listen for messages from the SW
+          navigator.serviceWorker.addEventListener('message', event => {
+            alert("Message from SW: " + event.data);
+          });
+        })
+        .catch(err => {
+          alert("Service worker registration failed: " + err);
+        });
+    } else {
+      alert("Service workers not supported.");
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault(); // Avoid auto prompt
+      alert("App is installable!");
+    });
   </script>
 </body>
 </html>
