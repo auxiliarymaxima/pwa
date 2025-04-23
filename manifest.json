@@ -1,6 +1,6 @@
 {
-  "name": "Simple PWA",
-  "short_name": "PWA",
+  "name": "The Beauty Studio",
+  "short_name": "Beauty Studio",
   "start_url": "/pwa/",
   "display": "standalone",
   "icons": [
