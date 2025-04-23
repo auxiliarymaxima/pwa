@@ -3,50 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simple PWA</title>
+  <title>My PWA</title>
   <meta name="theme-color" content="#ffffff" />
   <link rel="manifest" href="manifest.json" />
-  <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      margin-top: 50px;
-    }
-    #installBtn {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin-top: 20px;
-      display: none;
-    }
-  </style>
 </head>
 <body>
-  <h1>Welcome to My PWA</h1>
-  <p>You can install this app on your home screen.</p>
-
-  <button id="installBtn">Install App</button>
+  <h1>Installing App...</h1>
+  <p>This app will redirect you to the store if launched from your phone.</p>
 
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js');
     }
 
-    let deferredPrompt;
-    const installBtn = document.getElementById('installBtn');
+    // Detect if app is running in standalone PWA mode
+    const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      installBtn.style.display = 'inline-block';
+    if (isPWA) {
+      // Redirect to your Shopify store
+      window.location.href = "https://ezf0k1-ng.myshopify.com/";
+    } else {
+      // Handle install prompt
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
 
-      installBtn.addEventListener('click', () => {
-        installBtn.style.display = 'none';
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(() => {
-          deferredPrompt = null;
+        const installBtn = document.createElement('button');
+        installBtn.textContent = 'Install App';
+        document.body.appendChild(installBtn);
+
+        installBtn.addEventListener('click', () => {
+          installBtn.style.display = 'none';
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then(() => {
+            deferredPrompt = null;
+          });
         });
       });
-    });
+    }
   </script>
 </body>
 </html>
