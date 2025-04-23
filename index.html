@@ -4,62 +4,48 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Simple PWA</title>
+  <meta name="theme-color" content="#ffffff" />
   <link rel="manifest" href="manifest.json" />
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    #installBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 20px;
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <h1>Hello, PWA!</h1>
+  <h1>Welcome to My PWA</h1>
+  <p>You can install this app on your home screen.</p>
+
+  <button id="installBtn">Install App</button>
 
   <script>
-    alert("Page loaded");
-
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(reg => {
-          alert("Service worker registered!");
-
-          navigator.serviceWorker.addEventListener('message', event => {
-  alert("Message from SW: " + event.data);
-});
-          // Optional: listen for messages from the SW
-          navigator.serviceWorker.addEventListener('message', event => {
-            alert("Message from SW: " + event.data);
-          });
-        })
-        .catch(err => {
-          alert("Service worker registration failed: " + err);
-        });
-    } else {
-      alert("Service workers not supported.");
+      navigator.serviceWorker.register('service-worker.js');
     }
 
-  let deferredPrompt;
-
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault(); // Prevent auto prompt
-    deferredPrompt = e;
-    alert("App is installable!");
-
-    // Optionally show an install button here
-    const btn = document.createElement("button");
-    btn.innerText = "Install App";
-    btn.onclick = () => {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(choiceResult => {
-        if (choiceResult.outcome === 'accepted') {
-          alert("User accepted the install prompt");
-        } else {
-          alert("User dismissed the install prompt");
-        }
-        deferredPrompt = null;
-      });
-    };
-    document.body.appendChild(btn);
-  });
-
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
 
     window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault(); // Avoid auto prompt
-      alert("App is installable!");
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'inline-block';
+
+      installBtn.addEventListener('click', () => {
+        installBtn.style.display = 'none';
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+          deferredPrompt = null;
+        });
+      });
     });
   </script>
 </body>
